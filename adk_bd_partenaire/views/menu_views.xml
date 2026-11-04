@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_bd_partenaire_root" name="Partenaires" sequence="20"
+              web_icon="adk_bd_partenaire,static/description/icon.png"/>
+
+    <menuitem id="menu_bd_partenaire_fournisseurs" name="Fournisseurs"
+              parent="menu_bd_partenaire_root"
+              action="action_bd_partenaire_fournisseurs" sequence="10"/>
+
+    <menuitem id="menu_bd_partenaire_clients" name="Clients"
+              parent="menu_bd_partenaire_root"
+              action="action_bd_partenaire_clients" sequence="20"/>
+
+    <menuitem id="menu_bd_partenaire_tous" name="Tous"
+              parent="menu_bd_partenaire_root"
+              action="action_bd_partenaire_all" sequence="25"/>
+
+    <menuitem id="menu_bd_partenaire_recherche" name="Rechercher / Comparer"
+              parent="menu_bd_partenaire_root"
+              action="action_bd_partenaire_search_wizard" sequence="30"/>
+
+    <!-- ==================== Tableau de Bord ==================== -->
+    <menuitem id="menu_bd_partenaire_dashboard" name="Tableau de Bord"
+              parent="menu_bd_partenaire_root" sequence="40"/>
+
+    <menuitem id="menu_bd_partenaire_dashboard_leaderboard" name="Classement"
+              parent="menu_bd_partenaire_dashboard"
+              action="action_bd_partenaire_leaderboard" sequence="10"/>
+
+    <menuitem id="menu_bd_partenaire_dashboard_history" name="Historique des badges"
+              parent="menu_bd_partenaire_dashboard"
+              action="action_bd_partenaire_badge_assignment" sequence="20"/>
+
+    <menuitem id="menu_bd_partenaire_dashboard_stats" name="Statistiques"
+              parent="menu_bd_partenaire_dashboard"
+              action="action_bd_partenaire_badge_statistics" sequence="30"/>
+
+    <!-- ==================== Configuration ==================== -->
+    <menuitem id="menu_bd_partenaire_config" name="Configuration"
+              parent="menu_bd_partenaire_root" sequence="90"/>
+
+    <menuitem id="menu_bd_partenaire_config_domaine" name="Domaines d'Activité"
+              parent="menu_bd_partenaire_config"
+              action="action_bd_partenaire_activity_domain" sequence="10"/>
+
+    <menuitem id="menu_bd_partenaire_config_categorie" name="Catégories de Partenaire"
+              parent="menu_bd_partenaire_config"
+              action="action_bd_partenaire_category" sequence="20"/>
+
+    <menuitem id="menu_bd_partenaire_config_article_categorie" name="Catégories d'Article"
+              parent="menu_bd_partenaire_config"
+              action="action_bd_partenaire_article_category" sequence="25"/>
+
+    <menuitem id="menu_bd_partenaire_config_forme" name="Formes Juridiques"
+              parent="menu_bd_partenaire_config"
+              action="action_bd_partenaire_legal_form" sequence="30"/>
+
+    <menuitem id="menu_bd_partenaire_config_regime" name="Régimes Fiscaux"
+              parent="menu_bd_partenaire_config"
+              action="action_bd_partenaire_regime_fiscal" sequence="35"/>
+
+    <menuitem id="menu_bd_partenaire_config_badge" name="Badges &amp; Distinctions"
+              parent="menu_bd_partenaire_config"
+              action="action_bd_partenaire_badge" sequence="40"/>
+
+</odoo>

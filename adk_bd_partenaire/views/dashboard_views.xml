@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ==================== Kanban Classement (Leaderboard) ==================== -->
+    <record id="view_bd_partenaire_kanban_leaderboard" model="ir.ui.view">
+        <field name="name">bd.partenaire.kanban.leaderboard</field>
+        <field name="model">bd.partenaire</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_dashboard">
+                <field name="total_points"/>
+                <field name="badge_ids"/>
+                <field name="top_badge_id"/>
+                <field name="partner_role"/>
+                <field name="image_1920"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-2">
+                            <div class="d-flex align-items-center">
+                                <img alt="Logo" t-att-src="'/web/image?model=bd.partenaire&amp;id=' + record.id.raw_value + '&amp;field=image_1920'"
+                                     class="o_kanban_image rounded-circle me-2"
+                                     style="width:48px;height:48px;object-fit:cover;"/>
+                                <div class="flex-grow-1">
+                                    <strong><field name="name"/></strong>
+                                    <div class="text-muted">
+                                        <field name="top_badge_id"/>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge rounded-pill text-bg-warning fs-6">
+                                        <field name="total_points"/> pts
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <field name="badge_ids" widget="many2many_tags"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_bd_partenaire_leaderboard" model="ir.actions.act_window">
+        <field name="name">Classement des Meilleurs Partenaires</field>
+        <field name="res_model">bd.partenaire</field>
+        <field name="view_mode">kanban,list</field>
+        <field name="view_id" ref="view_bd_partenaire_kanban_leaderboard"/>
+        <field name="domain">[('total_points', '>', 0)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun partenaire classé pour le moment</p>
+            <p>Attribuez des badges depuis une fiche partenaire pour les voir apparaître ici.</p>
+        </field>
+    </record>
+
+    <!-- ==================== Graphique &amp; Pivot des attributions ==================== -->
+    <record id="view_bd_partenaire_badge_assignment_graph" model="ir.ui.view">
+        <field name="name">bd.partenaire.badge.assignment.graph</field>
+        <field name="model">bd.partenaire.badge.assignment</field>
+        <field name="arch" type="xml">
+            <graph string="Statistiques des Badges" type="bar">
+                <field name="partenaire_id"/>
+                <field name="points" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_bd_partenaire_badge_assignment_pivot" model="ir.ui.view">
+        <field name="name">bd.partenaire.badge.assignment.pivot</field>
+        <field name="model">bd.partenaire.badge.assignment</field>
+        <field name="arch" type="xml">
+            <pivot string="Statistiques des Badges">
+                <field name="partenaire_id" type="row"/>
+                <field name="badge_id" type="col"/>
+                <field name="points" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_bd_partenaire_badge_statistics" model="ir.actions.act_window">
+        <field name="name">Statistiques des Badges</field>
+        <field name="res_model">bd.partenaire.badge.assignment</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="context">{'search_default_filter_active': 1}</field>
+    </record>
+
+</odoo>
