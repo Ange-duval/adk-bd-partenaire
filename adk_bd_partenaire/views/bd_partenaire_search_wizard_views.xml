@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_bd_partenaire_search_wizard_form" model="ir.ui.view">
+        <field name="name">bd.partenaire.search.wizard.form</field>
+        <field name="model">bd.partenaire.search.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Rechercher un Partenaire">
+                <group>
+                    <group string="Que recherchez-vous ?">
+                        <field name="article_search" placeholder="Ex : ciment, ordinateur, transport..."/>
+                        <field name="article_categorie_id"/>
+                    </group>
+                    <group string="Filtres Complémentaires">
+                        <field name="domaine_activite_ids" widget="many2many_tags"/>
+                        <field name="categorie_ids" widget="many2many_tags"/>
+                        <field name="regime_fiscal_id"/>
+                        <field name="forme_juridique_id"/>
+                        <field name="score_min"/>
+                        <field name="city"/>
+                        <field name="only_agree"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_search" type="object" string="🔍 Rechercher"
+                            class="btn-primary"/>
+                    <button name="action_compare" type="object" string="Comparer les prix"
+                            class="btn-secondary"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_bd_partenaire_search_wizard" model="ir.actions.act_window">
+        <field name="name">Rechercher un Partenaire</field>
+        <field name="res_model">bd.partenaire.search.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_bd_partenaire_article_compare_list" model="ir.ui.view">
+        <field name="name">bd.partenaire.article.compare.list</field>
+        <field name="model">bd.partenaire.article</field>
+        <field name="arch" type="xml">
+            <list string="Comparaison des offres" default_order="prix_unitaire, delai_livraison_jours" create="false">
+                <field name="name"/>
+                <field name="partenaire_id"/>
+                <field name="prix_unitaire"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="unite"/>
+                <field name="delai_livraison_jours"/>
+                <field name="disponibilite" widget="badge"/>
+                <field name="date_maj"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

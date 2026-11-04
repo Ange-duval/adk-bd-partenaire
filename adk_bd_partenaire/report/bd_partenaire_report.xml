@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_bd_fiche" model="report.paperformat">
+        <field name="name">ADK Fiche partenaire (A4)</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">24</field>
+        <field name="margin_bottom">14</field>
+        <field name="margin_left">12</field>
+        <field name="margin_right">12</field>
+        <field name="header_spacing">18</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <template id="report_bd_partenaire_fiche">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="o">
+                <div class="header" style="font-family: Arial, sans-serif;">
+                    <table style="width:100%;"><tr>
+                        <td style="font-size:19px; font-weight:700;">Fiche partenaire</td>
+                        <td style="text-align:right; font-size:11px; color:#555;" t-esc="o.company_id.name or ''"/>
+                    </tr></table>
+                    <div style="border-bottom:2px solid #5b21b6; margin-top:6px;"/>
+                </div>
+                <div class="article" style="font-family: Arial, sans-serif; font-size:11px; color:#222;">
+                    <h2 style="margin:0; font-size:20px;"><span t-esc="o.name"/> <small style="color:#777;" t-esc="o.ref"/></h2>
+                    <div style="margin:4px 0 12px; color:#555;">
+                        <span t-esc="dict(o._fields['partner_role'].selection).get(o.partner_role)"/> ·
+                        <span t-esc="dict(o._fields['status'].selection).get(o.status)"/>
+                        <t t-if="o.top_badge_id"> · <span t-esc="o.top_badge_id.name"/> (<span t-esc="o.total_points"/> pts)</t>
+                    </div>
+                    <table style="width:100%; border-collapse:collapse; margin-bottom:12px;">
+                        <t t-foreach="[('NIU', o.niu), ('RCCM', o.rccm), ('Régime fiscal', o.regime_fiscal_id.name), ('Forme juridique', o.forme_juridique_id.name), ('Adresse', ', '.join([x for x in [o.street, o.city, o.country_id.name] if x])), ('Téléphone', o.phone or o.mobile), ('Email', o.email), ('Banque', o.bank_name), ('N° compte', o.bank_account)]" t-as="kv">
+                            <tr><td style="width:28%; padding:4px 6px; background:#f5f3ff; font-weight:700; border-bottom:1px solid #e5e7eb;" t-esc="kv[0]"/>
+                                <td style="padding:4px 6px; border-bottom:1px solid #e5e7eb;" t-esc="kv[1] or ''"/></tr>
+                        </t>
+                    </table>
+                    <t t-if="o.contact_ids">
+                        <h4 style="color:#5b21b6; margin:10px 0 4px;">Interlocuteurs</h4>
+                        <table style="width:100%; border-collapse:collapse;">
+                            <tr style="background:#5b21b6; color:#fff;"><th style="padding:4px 6px;text-align:left;">Nom</th><th style="padding:4px 6px;text-align:left;">Fonction</th><th style="padding:4px 6px;text-align:left;">Téléphone</th><th style="padding:4px 6px;text-align:left;">Email</th></tr>
+                            <tr t-foreach="o.contact_ids" t-as="c">
+                                <td style="padding:3px 6px; border-bottom:1px solid #e5e7eb;" t-esc="c.name"/><td style="padding:3px 6px; border-bottom:1px solid #e5e7eb;" t-esc="c.function or ''"/>
+                                <td style="padding:3px 6px; border-bottom:1px solid #e5e7eb;" t-esc="c.phone or ''"/><td style="padding:3px 6px; border-bottom:1px solid #e5e7eb;" t-esc="c.email or ''"/>
+                            </tr>
+                        </table>
+                    </t>
+                    <t t-if="o.article_ids">
+                        <h4 style="color:#5b21b6; margin:12px 0 4px;">Articles et services</h4>
+                        <table style="width:100%; border-collapse:collapse;">
+                            <thead style="display:table-header-group;"><tr style="background:#5b21b6; color:#fff;"><th style="padding:4px 6px;text-align:left;">Désignation</th><th style="padding:4px 6px;text-align:right;">Prix unitaire</th><th style="padding:4px 6px;text-align:left;">Unité</th><th style="padding:4px 6px;text-align:right;">Délai (j)</th></tr></thead>
+                            <tr t-foreach="o.article_ids" t-as="a" style="page-break-inside:avoid;">
+                                <td style="padding:3px 6px; border-bottom:1px solid #e5e7eb;" t-esc="a.name"/>
+                                <td style="padding:3px 6px; border-bottom:1px solid #e5e7eb; text-align:right;" t-esc="'{:,.2f}'.format(a.prix_unitaire).replace(',', ' ')"/>
+                                <td style="padding:3px 6px; border-bottom:1px solid #e5e7eb;" t-esc="a.unite or ''"/>
+                                <td style="padding:3px 6px; border-bottom:1px solid #e5e7eb; text-align:right;" t-esc="a.delai_livraison_jours"/>
+                            </tr>
+                        </table>
+                    </t>
+                </div>
+                <div class="footer" style="font-family: Arial, sans-serif; font-size:9px; color:#666; text-align:right;">
+                    Page <span class="page"/> / <span class="topage"/>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_bd_partenaire_fiche" model="ir.actions.report">
+        <field name="name">Fiche partenaire (PDF)</field>
+        <field name="model">bd.partenaire</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">adk_bd_partenaire.report_bd_partenaire_fiche</field>
+        <field name="print_report_name">'Partenaire_%s' % (object.ref or object.name)</field>
+        <field name="paperformat_id" ref="paperformat_bd_fiche"/>
+        <field name="binding_model_id" ref="model_bd_partenaire"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_server_bd_partenaire_xlsx" model="ir.actions.server">
+        <field name="name">Exporter en Excel</field>
+        <field name="model_id" ref="model_bd_partenaire"/>
+        <field name="binding_model_id" ref="model_bd_partenaire"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_export_xlsx()</field>
+    </record>
+</odoo>
